@@ -178,14 +178,17 @@ function MobileMenu({ open, onClose, active }: { open: boolean; onClose: () => v
           role="dialog"
           aria-modal="true"
           aria-label="Site menu"
-          className="fixed inset-0 z-[70] flex flex-col overflow-y-auto bg-void/[0.97] backdrop-blur-2xl lg:hidden"
+          className="fixed inset-0 z-[70] flex flex-col overflow-x-hidden overflow-y-auto overscroll-contain bg-void/[0.97] backdrop-blur-2xl lg:hidden"
           initial={{ clipPath: "circle(0% at calc(100% - 3rem) 2.5rem)" }}
           animate={{ clipPath: "circle(150% at calc(100% - 3rem) 2.5rem)" }}
           exit={{ clipPath: "circle(0% at calc(100% - 3rem) 2.5rem)" }}
           transition={{ duration: 0.8, ease: ease.inOut }}
         >
-          <div aria-hidden className="pointer-events-none absolute inset-0 grid-field fade-edges opacity-60" />
-          <div aria-hidden className="pointer-events-none absolute -right-32 -top-32 size-96 rounded-full bg-cyan/10 blur-3xl" />
+          {/* Decorations live in their own clipped layer so the glow can't widen the menu. */}
+          <div aria-hidden className="pointer-events-none fixed inset-0 overflow-hidden">
+            <div className="absolute inset-0 grid-field fade-edges opacity-60" />
+            <div className="absolute -right-32 -top-32 size-96 rounded-full bg-cyan/10 blur-3xl" />
+          </div>
 
           <div className="shell relative flex h-[4.5rem] items-center justify-between pt-3">
             <span className="label">Menu</span>
