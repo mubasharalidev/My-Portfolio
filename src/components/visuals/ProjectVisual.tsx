@@ -8,7 +8,9 @@ const captions: Record<VisualKind, string> = {
   agents: "Agent topology",
   retrieval: "Retrieval pipeline",
   analytics: "Interface composition",
-  studio: "Generation workspace",
+  pipeline: "Agent pipeline",
+  ledger: "Transaction platform",
+  migration: "Strangler migration",
 };
 
 const glows: Record<Project["accent"], string> = {
@@ -47,8 +49,12 @@ function Art({ kind, uid }: { kind: VisualKind; uid: string }) {
       return <RetrievalArt {...common} />;
     case "analytics":
       return <AnalyticsArt uid={uid} {...common} />;
-    case "studio":
-      return <StudioArt uid={uid} {...common} />;
+    case "pipeline":
+      return <PipelineArt {...common} />;
+    case "ledger":
+      return <LedgerArt {...common} />;
+    case "migration":
+      return <MigrationArt {...common} />;
   }
 }
 
@@ -65,16 +71,16 @@ function Label({ x, y, children, anchor = "middle", fill = C.dim, size = 8 }: { 
 /* 01 — Planner → specialised agents → tools → synthesis */
 function AgentsArt(props: SvgProps) {
   const agents = [
-    { x: 85, label: "RESEARCH" },
-    { x: 200, label: "ANALYSIS" },
-    { x: 315, label: "ACTION" },
+    { x: 85, label: "RETRIEVE" },
+    { x: 200, label: "REASON" },
+    { x: 315, label: "ACT" },
   ];
   const toPaths = agents.map((a) => `M200 128 C200 165 ${a.x} 160 ${a.x} 192`);
   const fromPaths = agents.map((a) => `M${a.x} 258 C${a.x} 300 200 290 200 322`);
   return (
     <svg {...props}>
       <rect x="160" y="34" width="80" height="24" rx="12" fill="none" stroke={C.line} />
-      <Label x={200} y={49} fill={C.ink}>GOAL</Label>
+      <Label x={200} y={49} fill={C.ink}>TICKET</Label>
       <path d="M200 58 V92" stroke={C.cyan} strokeOpacity=".6" className="flow-dash" />
 
       <rect x="138" y="92" width="124" height="36" rx="10" fill={C.bg} stroke={C.cyan} strokeOpacity=".7" />
@@ -112,9 +118,9 @@ function AgentsArt(props: SvgProps) {
       ))}
 
       <rect x="132" y="322" width="136" height="38" rx="10" fill={C.bg} stroke={C.lime} strokeOpacity=".8" />
-      <Label x={200} y={344} fill={C.lime} size={9}>SYNTHESIS</Label>
+      <Label x={200} y={344} fill={C.lime} size={9}>RESOLUTION</Label>
       <path d="M70 380 H330" stroke={C.line} strokeDasharray="1 5" />
-      <Label x={200} y={394} size={6.5}>SHARED STATE · TRACED</Label>
+      <Label x={200} y={394} size={6.5}>GROUNDED BY RAG · PINECONE</Label>
     </svg>
   );
 }
@@ -136,7 +142,7 @@ function RetrievalArt(props: SvgProps) {
           {i === 2 && [16, 26, 36, 46, 56].map((y) => <line key={y} x1="10" x2={y === 56 ? 36 : 56} y1={y} y2={y} stroke={C.dim} strokeOpacity=".5" />)}
         </g>
       ))}
-      <Label x={86} y={160} anchor="middle">DOCUMENTS</Label>
+      <Label x={86} y={160} anchor="middle">HELP CENTER · TICKETS</Label>
 
       <path d="M120 96 H160" stroke={C.azure} strokeOpacity=".6" className="flow-dash" />
       <Packet path="M120 96 H160" dur={1.6} r={2.2} fill={C.azure} />
@@ -173,7 +179,7 @@ function RetrievalArt(props: SvgProps) {
           <Label x={9} y={9.5} fill={C.lime} size={7}>{n}</Label>
         </g>
       ))}
-      <Label x={44} y={390} anchor="start">GROUNDED ANSWER · CITED</Label>
+      <Label x={44} y={390} anchor="start">STREAMED ANSWER · WEBSOCKETS</Label>
     </svg>
   );
 }
@@ -235,65 +241,207 @@ function AnalyticsArt({ uid, ...props }: SvgProps) {
   );
 }
 
-/* 04 — Preview, prompt and multi-track editing with a generating clip */
-function StudioArt({ uid, ...props }: SvgProps) {
+/* 04 — Five-stage document pipeline with model routing and cited output */
+function PipelineArt(props: SvgProps) {
+  const stages = ["INGEST", "CLASSIFY", "EXTRACT", "CROSS-REF", "SUMMARISE"];
+  const y0 = 34;
+  const gap = 60;
   return (
     <svg {...props}>
-      <defs>
-        <linearGradient id={`${uid}-st-sky`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor={C.azure} stopOpacity=".55" />
-          <stop offset="1" stopColor={C.cyan} stopOpacity=".08" />
-        </linearGradient>
-        <linearGradient id={`${uid}-st-gen`} x1="0" x2="1">
-          <stop offset="0" stopColor={C.lime} stopOpacity=".1" />
-          <stop offset=".5" stopColor={C.lime} stopOpacity=".6" />
-          <stop offset="1" stopColor={C.lime} stopOpacity=".1" />
-        </linearGradient>
-        <clipPath id={`${uid}-st-frame`}><rect x="70" y="36" width="260" height="146" rx="10" /></clipPath>
-      </defs>
-
-      <g clipPath={`url(#${uid}-st-frame)`}>
-        <rect x="70" y="36" width="260" height="146" fill={`url(#${uid}-st-sky)`} />
-        <circle cx="268" cy="88" r="20" fill={C.lime} fillOpacity=".8" />
-        <path d="M70 182 L130 120 L170 150 L222 98 L280 160 L330 128 V182 Z" fill={C.bg} fillOpacity=".85" />
-        <path d="M70 182 L150 140 L210 170 L270 136 L330 170 V182 Z" fill={C.bg} />
-      </g>
-      <rect x="70" y="36" width="260" height="146" rx="10" fill="none" stroke={C.line} />
-      {[[70, 36], [330, 36], [70, 182], [330, 182]].map(([x, y], i) => (
-        <path key={i} d={`M${x + (x > 200 ? -10 : 10)} ${y} H${x} V${y + (y > 100 ? -10 : 10)}`} stroke={C.cyan} fill="none" strokeWidth="1.5" />
-      ))}
-
-      <rect x="70" y="196" width="260" height="26" rx="13" fill={C.bg} stroke={C.lime} strokeOpacity=".55" />
-      <path d="M84 209 l2 4 4 2 -4 2 -2 4 -2 -4 -4 -2 4 -2z" fill={C.lime} transform="translate(0 -6)" />
-      <rect x="98" y="206" width="150" height="6" rx="3" fill={C.ink} fillOpacity=".3" />
-      <Label x={316} y={212} anchor="end" fill={C.lime} size={7}>PROMPT</Label>
-
-      {[
-        { y: 244, clips: [[60, 90, C.azure], [158, 120, C.azure]] },
-        { y: 276, clips: [[60, 54, C.cyan], [122, 70, "gen"], [200, 96, C.cyan]] },
-        { y: 308, clips: [[60, 200, C.dim]] },
-      ].map((track, ti) => (
-        <g key={ti}>
-          <rect x="30" y={track.y} width="20" height="22" rx="4" fill="none" stroke={C.line} />
-          {track.clips.map(([x, w, col], ci) =>
-            col === "gen" ? (
-              <g key={ci}>
-                <rect x={x as number} y={track.y} width={w as number} height="22" rx="5" fill={C.bg} stroke={C.lime} strokeDasharray="3 3" />
-                <rect x={x as number} y={track.y} width={w as number} height="22" rx="5" fill={`url(#${uid}-st-gen)`} className="pulse-dot" />
-              </g>
-            ) : (
-              <rect key={ci} x={x as number} y={track.y} width={w as number} height="22" rx="5" fill={col as string} fillOpacity=".22" stroke={col as string} strokeOpacity=".55" />
-            ),
+      {[0, 1, 2].map((i) => (
+        <g key={i} transform={`translate(${26 + i * 8} ${40 + i * 8})`}>
+          <rect width="52" height="66" rx="5" fill={C.bg} stroke={i === 2 ? C.lime : C.line} strokeOpacity={i === 2 ? 0.8 : 1} />
+          {i === 2 && (
+            <text x="26" y="38" textAnchor="middle" fontSize="9" fill={C.lime} className="font-mono">
+              PDF
+            </text>
           )}
         </g>
       ))}
-      {Array.from({ length: 30 }, (_, i) => (
-        <line key={i} x1={60 + i * 10} x2={60 + i * 10} y1="338" y2={i % 5 ? 342 : 346} stroke={C.dim} strokeOpacity=".6" />
+      <Label x={68} y={140}>50–300 PDFs</Label>
+      <path d="M94 84 C120 84 124 51 150 51" fill="none" stroke={C.lime} strokeOpacity=".6" className="flow-dash" />
+
+      <path d={`M220 ${y0 + 34} V${y0 + gap * 4}`} stroke={C.line} />
+      <Packet path={`M220 ${y0 + 17} V${y0 + gap * 4 + 17}`} dur={3.2} r={3} />
+      <Packet path={`M220 ${y0 + 17} V${y0 + gap * 4 + 17}`} dur={3.2} delay={1.6} r={3} fill={C.cyan} />
+
+      {stages.map((s, i) => {
+        const y = y0 + i * gap;
+        const hot = i === 2 || i === 4;
+        return (
+          <g key={s}>
+            <rect x="150" y={y} width="140" height="34" rx="9" fill={C.bg} stroke={hot ? C.lime : C.azure} strokeOpacity={hot ? 0.8 : 0.55} />
+            <circle cx="168" cy={y + 17} r="8" fill="none" stroke={C.dim} strokeOpacity=".7" />
+            <text x="168" y={y + 20} textAnchor="middle" fontSize="8" fill={C.ink} className="font-mono">
+              {i + 1}
+            </text>
+            <Label x={232} y={y + 20} fill={hot ? C.lime : C.ink} size={8.5}>
+              {s}
+            </Label>
+          </g>
+        );
+      })}
+
+      {[
+        { y: y0 + gap * 2, label: "GPT-4o" },
+        { y: y0 + gap * 4, label: "CLAUDE" },
+      ].map((m) => (
+        <g key={m.label}>
+          <line x1="290" x2="306" y1={m.y + 17} y2={m.y + 17} stroke={C.lime} strokeOpacity=".6" strokeDasharray="2 3" />
+          <rect x="306" y={m.y + 5} width="70" height="24" rx="12" fill="none" stroke={C.lime} strokeOpacity=".7" />
+          <Label x={341} y={m.y + 20} fill={C.lime} size={7.5}>
+            {m.label}
+          </Label>
+        </g>
       ))}
-      <line x1="236" x2="236" y1="236" y2="350" stroke={C.lime} strokeWidth="1.5" />
-      <path d="M231 232 h10 l-5 6z" fill={C.lime} />
-      <Label x={186} y={268} fill={C.lime} size={6}>GENERATING</Label>
-      <Label x={200} y={376}>EDIT · REGENERATE · ASSEMBLE</Label>
+
+      <path d={`M220 ${y0 + gap * 4 + 34} V330`} stroke={C.cyan} strokeOpacity=".6" className="flow-dash" />
+      <rect x="110" y="330" width="220" height="40" rx="10" fill={C.bg} stroke={C.cyan} strokeOpacity=".6" />
+      <line x1="126" x2="226" y1="346" y2="346" stroke={C.ink} strokeOpacity=".35" />
+      <line x1="126" x2="196" y1="356" y2="356" stroke={C.ink} strokeOpacity=".35" />
+      {["p.12", "p.47"].map((c, i) => (
+        <g key={c} transform={`translate(${246 + i * 38} 342)`}>
+          <rect width="32" height="16" rx="4" fill="none" stroke={C.lime} strokeOpacity=".8" />
+          <Label x={16} y={11} fill={C.lime} size={7}>
+            {c}
+          </Label>
+        </g>
+      ))}
+      <Label x={220} y={390}>CITED FINDINGS</Label>
+    </svg>
+  );
+}
+
+/* 05 — Transaction stream → services → partitioned store + replica → batch */
+function LedgerArt(props: SvgProps) {
+  const rows = [56, 74, 92, 110, 128, 146];
+  const services = [50, 100, 150];
+  return (
+    <svg {...props}>
+      {rows.map((y, i) => (
+        <g key={y}>
+          {[0, 1, 2, 3].map((k) => (
+            <rect key={k} x={20 + k * 17 + (i % 2) * 6} y={y} width="11" height="6" rx="2" fill={k === 3 ? C.cyan : C.azure} fillOpacity={0.25 + k * 0.18} />
+          ))}
+        </g>
+      ))}
+      <Label x={58} y={174}>3M+ TX / DAY</Label>
+      {services.map((y, i) => (
+        <path key={i} d={`M96 ${rows[i * 2] + 3} C112 ${rows[i * 2] + 3} 112 ${y + 17} 130 ${y + 17}`} fill="none" stroke={C.cyan} strokeOpacity=".5" className="flow-dash" />
+      ))}
+
+      {services.map((y, i) => (
+        <g key={y}>
+          <rect x="130" y={y} width="84" height="34" rx="9" fill={C.bg} stroke={C.cyan} strokeOpacity=".6" />
+          <Label x={172} y={y + 15} fill={C.ink} size={7.5}>
+            FASTAPI
+          </Label>
+          <Label x={172} y={y + 26} size={6}>
+            {`SERVICE 0${i + 1}`}
+          </Label>
+          <path d={`M214 ${y + 17} C236 ${y + 17} 236 110 258 110`} fill="none" stroke={C.line} />
+          <Packet path={`M214 ${y + 17} C236 ${y + 17} 236 110 258 110`} dur={1.8} delay={i * 0.6} r={2.4} />
+        </g>
+      ))}
+      <Label x={172} y={206} fill={C.lime} size={7}>
+        {"P95 < 200MS"}
+      </Label>
+
+      <path d="M260 58 v104 a46 12 0 0 0 92 0 v-104" fill={C.bg} stroke={C.azure} strokeOpacity=".7" />
+      <ellipse cx="306" cy="58" rx="46" ry="12" fill={C.bg} stroke={C.azure} strokeOpacity=".7" />
+      {[84, 110, 136].map((y) => (
+        <path key={y} d={`M260 ${y} a46 12 0 0 0 92 0`} fill="none" stroke={C.azure} strokeOpacity=".35" strokeDasharray="3 3" />
+      ))}
+      {["P1", "P2", "P3", "P4"].map((p, i) => (
+        <Label key={p} x={306} y={78 + i * 26} size={6.5}>
+          {p}
+        </Label>
+      ))}
+      <Label x={306} y={194}>POSTGRESQL · PARTITIONED</Label>
+
+      <line x1="340" y1="172" x2="352" y2="214" stroke={C.cyan} strokeOpacity=".6" strokeDasharray="2 3" />
+      <path d="M326 222 v34 a26 7 0 0 0 52 0 v-34" fill={C.bg} stroke={C.cyan} strokeOpacity=".6" />
+      <ellipse cx="352" cy="222" rx="26" ry="7" fill={C.bg} stroke={C.cyan} strokeOpacity=".6" />
+      <Label x={352} y={280} size={6.5}>
+        READ REPLICA
+      </Label>
+
+      <path d="M280 176 C280 250 200 250 200 296" fill="none" stroke={C.lime} strokeOpacity=".6" className="flow-dash" />
+      <rect x="40" y="296" width="320" height="52" rx="12" fill={C.bg} stroke={C.lime} strokeOpacity=".7" />
+      <Label x={62} y={316} anchor="start" fill={C.lime} size={7.5}>
+        DATABRICKS · SPARK SQL
+      </Label>
+      {Array.from({ length: 12 }, (_, i) => (
+        <rect key={i} x={62 + i * 23.5} y="326" width="19" height="8" rx="2" fill={C.lime} fillOpacity={i < 5 ? 0.75 : 0.18} className={i === 4 ? "pulse-dot" : undefined} />
+      ))}
+      <Label x={200} y={376}>ASYNC BATCH PIPELINES</Label>
+    </svg>
+  );
+}
+
+/* 06 — Monolith strangled into eight services over a Kafka bus */
+function MigrationArt(props: SvgProps) {
+  const extracted = new Set([0, 2, 3, 5]);
+  const tiles = Array.from({ length: 8 }, (_, i) => ({ x: 244 + (i % 2) * 72, y: 54 + Math.floor(i / 2) * 60, go: i % 2 === 0 }));
+  return (
+    <svg {...props}>
+      <rect x="26" y="48" width="104" height="236" rx="10" fill={C.bg} stroke={C.line} />
+      <rect x="20" y="42" width="116" height="248" rx="13" fill="none" stroke={C.lime} strokeOpacity=".45" strokeDasharray="4 5" />
+      {Array.from({ length: 8 }, (_, i) => (
+        <rect
+          key={i}
+          x="38"
+          y={60 + i * 27.5}
+          width="80"
+          height="20"
+          rx="4"
+          fill={extracted.has(i) ? "none" : C.dim}
+          fillOpacity={extracted.has(i) ? 0 : 0.28}
+          stroke={extracted.has(i) ? C.dim : "none"}
+          strokeOpacity=".5"
+          strokeDasharray="3 3"
+        />
+      ))}
+      <Label x={78} y={308}>MONOLITH · 200K LOC</Label>
+      <Label x={78} y={320} fill={C.lime} size={6.5}>
+        STRANGLER FACADE
+      </Label>
+
+      {[70, 125, 180, 235].map((y, i) => (
+        <g key={y}>
+          <path d={`M130 ${y} H196`} stroke={C.line} />
+          <Packet path={`M130 ${y} H196`} dur={1.6} delay={i * 0.4} r={2.4} fill={C.cyan} />
+        </g>
+      ))}
+
+      <rect x="196" y="44" width="16" height="250" rx="8" fill={C.bg} stroke={C.azure} strokeOpacity=".7" />
+      <path d="M204 56 V282" stroke={C.azure} strokeOpacity=".6" className="flow-dash" />
+      <Packet path="M204 282 V56" dur={2.4} r={2.6} />
+      <Label x={204} y={310} fill={C.azure}>
+        KAFKA
+      </Label>
+
+      {tiles.map((t, i) => (
+        <g key={i}>
+          {t.go && <path d={`M212 ${t.y + 20} H${t.x}`} stroke={C.line} />}
+          <rect x={t.x} y={t.y} width="62" height="40" rx="8" fill={t.go ? C.cyan : C.azure} fillOpacity=".12" stroke={t.go ? C.cyan : C.azure} strokeOpacity=".65" />
+          <Label x={t.x + 31} y={t.y + 18} fill={C.ink} size={7}>
+            {t.go ? "GO" : "NEST"}
+          </Label>
+          <Label x={t.x + 31} y={t.y + 30} size={6}>
+            {`SVC 0${i + 1}`}
+          </Label>
+        </g>
+      ))}
+      <Label x={311} y={310}>8 SERVICES · EKS</Label>
+
+      <g transform="translate(200 352)">
+        <circle r="16" fill="none" stroke={C.lime} strokeOpacity=".7" strokeDasharray="70 31" className="pulse-dot" />
+        <path d="M12 -12 l4 2 -1 -5" fill="none" stroke={C.lime} strokeWidth="1.4" />
+      </g>
+      <Label x={226} y={355} anchor="start" fill={C.lime} size={7}>
+        TERRAFORM · ARGOCD (GITOPS)
+      </Label>
     </svg>
   );
 }

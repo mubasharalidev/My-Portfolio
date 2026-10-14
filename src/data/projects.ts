@@ -1,20 +1,18 @@
 /**
- * Featured projects. Titles, summaries and stacks come from the design
- * reference. The case-study narrative describes the architecture of each
- * system and contains no metrics, clients or outcomes.
- *
- * EDIT: replace the narrative with your specifics, and add verified
- * outcomes to `results` — the Outcomes section only renders when it has
- * entries. Add `liveUrl` / `repoUrl` when they are public.
+ * Featured projects, from the CV (Mubashar_Ali_Senior_Full_Stack_AI_Engineer_CV.pdf).
+ * Every figure in `results` is stated in the CV. The Outcomes section only
+ * renders when `results` has entries. Add `liveUrl` / `repoUrl` when public.
  */
 
-export type ProjectVisual = "agents" | "retrieval" | "analytics" | "studio";
+export type ProjectVisual = "agents" | "pipeline" | "retrieval" | "ledger" | "migration" | "analytics";
 
 export type Project = {
   slug: string;
   index: string;
-  category: "AI" | "LLM" | "Web";
+  category: "AI" | "LLM" | "Backend" | "Cloud" | "Full-stack";
   title: string;
+  /** Company / client context, when stated in the CV. */
+  context: string | null;
   tagline: string;
   summary: string;
   problem: string;
@@ -34,212 +32,316 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    slug: "ai-agent-platform",
+    slug: "agentic-customer-operations",
     index: "01",
     category: "AI",
-    title: "AI Agent Platform",
-    tagline: "Multi-agent system for research, analysis and automated workflows.",
+    title: "Agentic Customer Operations",
+    context: "Tech Domain · UK",
+    tagline: "RAG pipelines and multi-step AI agents automating customer operations for a 50,000+ user SaaS platform.",
     summary:
-      "A platform where specialised agents plan, research, analyse and act together — coordinated as an explicit graph rather than one long prompt.",
+      "Multi-step AI agents, grounded by retrieval over the platform’s own knowledge, that take over repetitive customer-operations work on a multi-tenant SaaS product used by 50,000+ people.",
     problem:
-      "Research and analysis tasks span many steps and sources. A single prompt loses track of intermediate results, can't use tools reliably, and is impossible to inspect when it goes wrong.",
-    role: "Architecture, agent design and full-stack implementation",
+      "Customer operations on a 50,000+ user SaaS platform carried a heavy manual workload, and Tier-1 tickets took too long to resolve.",
+    role: "Designed the RAG pipelines and multi-step AI agents",
     solution:
-      "Work is decomposed by a planner and routed across specialised agents in a LangGraph state machine. Each agent has a narrow toolset, shared state is explicit, and every step is traceable in the interface.",
-    stack: ["Next.js", "LangGraph", "OpenAI", "TypeScript"],
+      "LangChain agents grounded by RAG pipelines on Pinecone, running on OpenAI and Anthropic Claude models behind FastAPI services, with a React / Next.js interface — deployed on Kubernetes on AWS.",
+    stack: ["Python", "FastAPI", "LangChain", "OpenAI", "Anthropic Claude", "Pinecone", "React.js", "Next.js", "Kubernetes", "AWS"],
     visual: "agents",
     accent: "cyan",
     challenges: [
       {
-        title: "Keeping agents on task",
-        body: "Open-ended agents drift. Constraining each agent to a role, a toolset and a typed output keeps behaviour predictable without removing flexibility.",
+        title: "Grounded, not guessed",
+        body: "Agents act on customer operations, so answers have to come from the platform’s own content. Retrieval on Pinecone grounds each step before the model acts.",
       },
       {
-        title: "Observable execution",
-        body: "Multi-step runs need to be debuggable. Every node transition, tool call and intermediate result is recorded so a run can be replayed and inspected.",
-      },
-      {
-        title: "Long-running work in a web UI",
-        body: "Agent runs outlive a single request. Progress streams to the interface so users see the plan unfold instead of waiting on a spinner.",
+        title: "Multi-step work",
+        body: "Operational tasks span several steps. Agents chain retrieval, reasoning and actions rather than answering in a single prompt.",
       },
     ],
     architecture: [
-      { stage: "Interface", detail: "Next.js app streaming run state and agent output" },
-      { stage: "Planner", detail: "Decomposes the goal into a task graph" },
-      { stage: "Agent graph", detail: "LangGraph nodes for research, analysis and action" },
-      { stage: "Tools", detail: "Search, retrieval and integrations exposed as typed tools" },
-      { stage: "Synthesis", detail: "Merges agent outputs into a reviewed final result" },
+      { stage: "Interface", detail: "React.js / Next.js product UI" },
+      { stage: "API", detail: "Python FastAPI services" },
+      { stage: "Agents", detail: "Multi-step LangChain agents" },
+      { stage: "Retrieval", detail: "RAG pipelines on Pinecone" },
+      { stage: "Models", detail: "OpenAI and Anthropic Claude" },
+      { stage: "Platform", detail: "Kubernetes on AWS" },
     ],
     highlights: [
-      "Explicit, typed shared state between agents",
-      "Role-scoped toolsets per agent",
-      "Streamed execution trace in the UI",
-      "Graph-based orchestration that is easy to extend",
+      "RAG pipelines on Pinecone",
+      "Multi-step AI agents with LangChain",
+      "OpenAI and Claude models",
+      "Serving a 50,000+ user SaaS platform",
     ],
     decisions: [
       {
-        title: "Graph over chain",
-        body: "Modelling the workflow as a graph allows branching, retries and parallel agents — things a linear chain can't express cleanly.",
-      },
-      {
-        title: "Narrow agents, clear contracts",
-        body: "Several focused agents with typed outputs are easier to test and reason about than one generalist agent with every tool.",
+        title: "Retrieval before action",
+        body: "Grounding agents in RAG pipelines keeps their actions tied to the platform’s real knowledge rather than model memory.",
       },
     ],
-    results: [],
+    results: [
+      "~60% less manual workload for the client",
+      "~3× faster Tier-1 ticket resolution",
+      "Became the platform’s most-adopted feature",
+    ],
     liveUrl: null,
     repoUrl: null,
   },
   {
-    slug: "enterprise-rag-platform",
+    slug: "multi-agent-document-intelligence",
     index: "02",
-    category: "LLM",
-    title: "Enterprise RAG Platform",
-    tagline: "Production-ready knowledge platform with secure document intelligence.",
+    category: "AI",
+    title: "Multi-Agent Document Intelligence",
+    context: null,
+    tagline: "A five-agent LangGraph pipeline that turns 50–300-PDF due-diligence packages into cited analysis.",
     summary:
-      "A retrieval-augmented knowledge platform that answers questions from an organisation's own documents — grounded, cited and permission-aware.",
+      "A due-diligence platform where five specialised agents ingest, classify, extract, cross-reference and summarise entire deal packages — every output traceable to the page it came from.",
     problem:
-      "Valuable knowledge sits in documents nobody can search well. General-purpose models don't know it, and answers that can't be traced back to a source can't be trusted.",
-    role: "Backend architecture, retrieval pipeline and API design",
+      "Each deal arrives as a due-diligence package of 50–300 PDFs, and intake took around 2.5 days of analyst time.",
+    role: "Built the five-agent pipeline and model-routing strategy",
     solution:
-      "Documents flow through an ingestion pipeline — parsing, chunking, embedding — into a vector store. A FastAPI service retrieves the most relevant passages, filtered by access rights, and grounds every answer in cited sources.",
-    stack: ["Python", "FastAPI", "Vector DB", "OpenAI"],
+      "A five-agent LangGraph pipeline for ingestion, classification, extraction, cross-referencing and summarisation, with page-level citations. Claude 3.5 Sonnet handles long-context reasoning and GPT-4o handles structured extraction.",
+    stack: ["Python 3.11", "FastAPI", "LangGraph", "CrewAI", "Claude 3.5 Sonnet", "GPT-4o", "Pinecone", "PostgreSQL", "AWS Bedrock", "Kubernetes"],
+    visual: "pipeline",
+    accent: "lime",
+    challenges: [
+      {
+        title: "Volume per deal",
+        body: "A single deal can mean 300 PDFs. The work is split into dedicated stages so each agent does one job well.",
+      },
+      {
+        title: "Traceability",
+        body: "Analysts must verify findings, so every output carries page-level citations back to the source document.",
+      },
+    ],
+    architecture: [
+      { stage: "Ingestion", detail: "Load 50–300 PDFs per deal" },
+      { stage: "Classification", detail: "Sort documents by type" },
+      { stage: "Extraction", detail: "Structured fields via GPT-4o" },
+      { stage: "Cross-referencing", detail: "Reconcile facts across documents" },
+      { stage: "Summarisation", detail: "Long-context synthesis via Claude 3.5 Sonnet, with page-level citations" },
+    ],
+    highlights: [
+      "Five specialised LangGraph agents",
+      "Page-level citations on outputs",
+      "Model routing by task",
+      "Pinecone + PostgreSQL storage",
+    ],
+    decisions: [
+      {
+        title: "Route models by task",
+        body: "Claude 3.5 Sonnet for long-context reasoning; GPT-4o for structured extraction — each model used where it is strongest.",
+      },
+      {
+        title: "One agent, one job",
+        body: "Splitting intake into five stages keeps each agent focused and makes the pipeline easier to inspect.",
+      },
+    ],
+    results: ["Intake cut from 2.5 days to ~6 hours", "~62% less analyst effort"],
+    liveUrl: null,
+    repoUrl: null,
+  },
+  {
+    slug: "customer-support-copilot",
+    index: "03",
+    category: "LLM",
+    title: "AI Support Copilot",
+    context: null,
+    tagline: "A RAG copilot over help-center content and Zendesk tickets, streaming answers to support agents in real time.",
+    summary:
+      "An AI-augmented copilot for B2B support teams that retrieves from help-center content and past Zendesk tickets and streams suggested answers as agents work.",
+    problem: "Average handling time was around 11 minutes per ticket, and too few Tier-1 tickets were resolved on first response.",
+    role: "Built the RAG copilot and real-time streaming",
+    solution:
+      "Retrieval over B2B help-center content and Zendesk tickets with ChromaDB, generation with GPT-4o and Anthropic Claude via LangChain on FastAPI, and answers streamed in real time to a React.js interface over WebSockets.",
+    stack: ["Python", "FastAPI", "LangChain", "GPT-4o", "Anthropic Claude", "ChromaDB", "Redis", "WebSockets", "React.js", "Zendesk API"],
     visual: "retrieval",
     accent: "azure",
     challenges: [
       {
-        title: "Retrieval quality",
-        body: "Answers are only as good as the retrieved context. Chunking strategy, metadata and ranking matter more than prompt wording.",
+        title: "Two knowledge sources",
+        body: "Useful answers live in both curated help-center articles and the long tail of past Zendesk tickets — retrieval covers both.",
       },
       {
-        title: "Security at the retrieval layer",
-        body: "Users must never see content they can't access. Permissions are applied when retrieving, not after generation.",
-      },
-      {
-        title: "Trustworthy answers",
-        body: "Every answer carries citations back to source passages so users can verify claims instead of taking them on faith.",
+        title: "Speed for live agents",
+        body: "Agents are mid-conversation, so answers stream token by token over WebSockets instead of arriving all at once.",
       },
     ],
     architecture: [
-      { stage: "Ingestion", detail: "Parse, clean and chunk documents with metadata" },
-      { stage: "Embedding", detail: "Encode chunks into vectors" },
-      { stage: "Vector store", detail: "Similarity search with metadata filtering" },
-      { stage: "API", detail: "FastAPI retrieval and generation endpoints" },
-      { stage: "Generation", detail: "Grounded answers with source citations" },
+      { stage: "Sources", detail: "Help-center content + Zendesk tickets (Zendesk API)" },
+      { stage: "Vector store", detail: "ChromaDB retrieval" },
+      { stage: "Generation", detail: "GPT-4o and Claude via LangChain" },
+      { stage: "API", detail: "FastAPI with Redis" },
+      { stage: "Streaming UI", detail: "React.js over WebSockets" },
     ],
     highlights: [
-      "Permission-aware retrieval",
-      "Citations on every answer",
-      "Async FastAPI service layer",
-      "Re-indexable ingestion pipeline",
+      "RAG over help-center and tickets",
+      "Real-time WebSocket streaming",
+      "Zendesk API integration",
+      "GPT-4o and Claude models",
     ],
     decisions: [
       {
-        title: "Filter before you generate",
-        body: "Applying access control at retrieval time means restricted content never reaches the model's context in the first place.",
-      },
-      {
-        title: "Retrieval is the product",
-        body: "Investing in ingestion and ranking gives larger quality gains than swapping models.",
+        title: "Stream, don’t wait",
+        body: "Real-time WebSocket streaming lets agents start reading a suggestion immediately, which matters when a customer is waiting.",
       },
     ],
-    results: [],
+    results: ["Average handling time cut from 11 to ~4 minutes", "Tier-1 first-response resolution raised to ~58%"],
     liveUrl: null,
     repoUrl: null,
   },
   {
-    slug: "analytics-dashboard",
-    index: "03",
-    category: "Web",
-    title: "Analytics Dashboard",
-    tagline: "Real-time analytics with AI insights and a modern user experience.",
+    slug: "enterprise-fintech-platform",
+    index: "04",
+    category: "Backend",
+    title: "Enterprise Fintech Platform",
+    context: "10Pearls",
+    tagline: "A microservices backend processing 3M+ transactions a day at p95 under 200ms — and the data pipelines behind it.",
     summary:
-      "A real-time analytics interface that pairs live metrics with AI-generated insights, built for clarity at high data density.",
+      "The core backend of an enterprise financial platform: high-throughput microservices, PostgreSQL scaled to tens of millions of rows, and batch workflows rebuilt on Databricks.",
     problem:
-      "Dashboards often show everything and explain nothing. Teams need live numbers, but also help understanding what changed and why it matters.",
-    role: "Frontend architecture, data visualisation and UX",
+      "An enterprise financial platform needed to process millions of transactions a day at low latency, while legacy batch workflows took 4.2 hours to run.",
+    role: "Backend architecture and data pipelines",
     solution:
-      "A Next.js and TypeScript interface with live-updating charts and a typed data layer. AI-generated summaries sit beside the data they describe, so insight and evidence are read together.",
-    stack: ["Next.js", "TypeScript", "Chart.js"],
+      "Python / FastAPI microservices on AWS (ECS, RDS, Lambda, S3) with Docker and Kubernetes; PostgreSQL scaled to 10M+ rows per table with partitioning and read replicas; batch workflows rebuilt as async Spark SQL pipelines on Databricks.",
+    stack: ["Python", "FastAPI", "PostgreSQL", "Redis", "Databricks", "Spark SQL", "Docker", "Kubernetes", "AWS ECS", "AWS RDS", "AWS Lambda", "AWS S3"],
+    visual: "ledger",
+    accent: "cyan",
+    challenges: [
+      {
+        title: "Throughput with low latency",
+        body: "3M+ transactions a day with a p95 under 200ms and an error rate under 0.1%.",
+      },
+      {
+        title: "Tables at scale",
+        body: "PostgreSQL tables grew past 10M rows, so storage had to scale without slowing reads.",
+      },
+    ],
+    architecture: [
+      { stage: "Services", detail: "Python / FastAPI microservices" },
+      { stage: "Platform", detail: "Docker & Kubernetes on AWS ECS, Lambda, S3" },
+      { stage: "Storage", detail: "PostgreSQL (RDS) with partitioning + read replicas, Redis" },
+      { stage: "Batch", detail: "Async Spark SQL pipelines on Databricks" },
+    ],
+    highlights: [
+      "Microservices architecture",
+      "Table partitioning and read replicas",
+      "Async Spark SQL on Databricks",
+      "Containerised on AWS",
+    ],
+    decisions: [
+      {
+        title: "Partition and replicate",
+        body: "Table partitioning and read replicas let PostgreSQL scale to 10M+ rows per table.",
+      },
+      {
+        title: "Move batch off the hot path",
+        body: "Legacy batch workflows were rebuilt as asynchronous Spark SQL pipelines on Databricks.",
+      },
+    ],
+    results: [
+      "3M+ transactions/day at p95 < 200ms",
+      "Error rate under 0.1%",
+      "Batch processing 55% faster (4.2h → 1.9h)",
+    ],
+    liveUrl: null,
+    repoUrl: null,
+  },
+  {
+    slug: "cloud-native-microservices-migration",
+    index: "05",
+    category: "Cloud",
+    title: "Microservices Migration",
+    context: null,
+    tagline: "A 200K-line Node.js monolith carved into 8 independently deployable services with the strangler pattern.",
+    summary:
+      "An incremental, cloud-native migration: a large Node.js monolith split into independently deployable services connected by Kafka events, with GitOps delivery on Kubernetes.",
+    problem: "A 200K-line Node.js monolith could only be released monthly.",
+    role: "Migration architecture and GitOps infrastructure",
+    solution:
+      "The strangler pattern carved functionality into 8 services in Golang (Gin) and Node.js (NestJS), communicating through Kafka-based asynchronous events on AWS EKS. Infrastructure is managed with Terraform and delivered through ArgoCD (GitOps), observed with Datadog.",
+    stack: ["Golang (Gin)", "Node.js (NestJS)", "Kubernetes (AWS EKS)", "Apache Kafka", "PostgreSQL", "Terraform", "ArgoCD", "Datadog"],
+    visual: "migration",
+    accent: "azure",
+    challenges: [
+      {
+        title: "Migrating while running",
+        body: "The monolith stayed in service throughout, so services were extracted one at a time instead of in a single rewrite.",
+      },
+      {
+        title: "Decoupling services",
+        body: "Kafka-based asynchronous events let the new services evolve and deploy independently.",
+      },
+    ],
+    architecture: [
+      { stage: "Monolith", detail: "200K-line Node.js application" },
+      { stage: "Strangler facade", detail: "Functionality carved out incrementally" },
+      { stage: "Services", detail: "8 services in Golang (Gin) and NestJS" },
+      { stage: "Events", detail: "Apache Kafka asynchronous messaging" },
+      { stage: "Delivery", detail: "Terraform + ArgoCD on AWS EKS, Datadog" },
+    ],
+    highlights: [
+      "Strangler-pattern migration",
+      "Kafka event-driven architecture",
+      "Infrastructure as code with Terraform",
+      "GitOps delivery with ArgoCD",
+    ],
+    decisions: [
+      {
+        title: "Strangler over rewrite",
+        body: "Extracting services incrementally avoided a risky big-bang rewrite of 200K lines.",
+      },
+      {
+        title: "Events over direct calls",
+        body: "Asynchronous Kafka events keep services independently deployable.",
+      },
+    ],
+    results: ["Monthly releases → multiple deploys per day", "8 independently deployable microservices"],
+    liveUrl: null,
+    repoUrl: null,
+  },
+  {
+    slug: "ai-shopify-erp",
+    index: "06",
+    category: "Full-stack",
+    title: "AI-Powered Shopify ERP",
+    context: null,
+    tagline: "A multi-tenant ERP for Shopify merchants, with an AI assistant that answers business questions in plain language.",
+    summary:
+      "One dashboard for Shopify merchants to run orders, inventory, products, customers, sales and finances — synced in real time, with AI analytics and recommendations built in.",
+    problem:
+      "Shopify merchants need to manage orders, inventory, products, customers, sales and finances — and make sense of the data — from one place.",
+    role: "Built the multi-tenant ERP and AI analytics assistant",
+    solution:
+      "A multi-tenant Next.js / TypeScript application on FastAPI, PostgreSQL and Redis, synced in real time through the Shopify Admin API (GraphQL) and webhooks. An AI analytics assistant (OpenAI, LangChain) answers business questions in natural language.",
+    stack: ["Next.js", "React.js", "TypeScript", "Python", "FastAPI", "PostgreSQL", "Redis", "Shopify Admin API (GraphQL)", "Webhooks", "OpenAI", "LangChain", "AWS"],
     visual: "analytics",
     accent: "lime",
     challenges: [
       {
-        title: "Density without noise",
-        body: "Showing a lot of data while keeping the important signal obvious takes deliberate hierarchy, not more widgets.",
+        title: "Staying in sync",
+        body: "Store data changes constantly; the Shopify Admin API and webhooks keep the ERP synced in real time.",
       },
       {
-        title: "Real-time rendering",
-        body: "Live updates must not cause jank. Updates are batched and charts only re-render what changed.",
-      },
-      {
-        title: "Placing AI in context",
-        body: "Insights are positioned next to the metrics they explain, keeping generated text accountable to visible data.",
+        title: "Insight, not just data",
+        body: "The assistant analyses sales, inventory and customer data and turns it into answers and recommendations.",
       },
     ],
     architecture: [
-      { stage: "Data layer", detail: "Typed models for metrics and time series" },
-      { stage: "Live updates", detail: "Streaming updates batched into the UI" },
-      { stage: "Visualisation", detail: "Chart.js views tuned for density" },
-      { stage: "Insights", detail: "AI summaries tied to the underlying data" },
+      { stage: "Sync", detail: "Shopify Admin API (GraphQL) + webhooks" },
+      { stage: "Backend", detail: "FastAPI, PostgreSQL, Redis — multi-tenant" },
+      { stage: "Dashboard", detail: "Next.js / TypeScript ERP interface" },
+      { stage: "AI assistant", detail: "OpenAI + LangChain natural-language analytics" },
     ],
     highlights: [
-      "End-to-end TypeScript types",
-      "Batched real-time chart updates",
-      "Insight-beside-evidence layout",
-      "Responsive from desktop to mobile",
+      "Orders, inventory, products, customers, sales and finances in one dashboard",
+      "Real-time sync via Shopify webhooks",
+      "Natural-language analytics assistant",
+      "Restock alerts, sales trends, product and pricing suggestions",
     ],
     decisions: [
       {
-        title: "Insight next to evidence",
-        body: "AI summaries never float on their own — they are always anchored to the chart they describe.",
-      },
-    ],
-    results: [],
-    liveUrl: null,
-    repoUrl: null,
-  },
-  {
-    slug: "ai-content-studio",
-    index: "04",
-    category: "AI",
-    title: "AI Content Studio",
-    tagline: "End-to-end platform for generating and editing multimedia content.",
-    summary:
-      "A creative workspace that brings generation and editing together, so AI output is a starting point to refine rather than a final draft to accept.",
-    problem:
-      "Generating content is easy; making it usable is not. Creators bounce between tools to generate, revise and assemble — losing context at every step.",
-    role: "Full-stack implementation and generation pipeline",
-    solution:
-      "A React workspace backed by Node.js services that orchestrate generation jobs. Outputs land directly in an editor where they can be revised, regenerated in part, and assembled.",
-    stack: ["React", "Node.js", "OpenAI"],
-    visual: "studio",
-    accent: "cyan",
-    challenges: [
-      {
-        title: "Asynchronous generation",
-        body: "Generation jobs take time. A job pipeline with progress reporting keeps the editor responsive while work happens in the background.",
-      },
-      {
-        title: "Editing, not just generating",
-        body: "Users need to change one part without regenerating everything — so outputs are kept as structured, editable pieces.",
-      },
-    ],
-    architecture: [
-      { stage: "Workspace", detail: "React editor for composing and revising" },
-      { stage: "Job service", detail: "Node.js orchestration of generation jobs" },
-      { stage: "Models", detail: "OpenAI generation behind a provider interface" },
-      { stage: "Assets", detail: "Structured, versioned content pieces" },
-    ],
-    highlights: [
-      "Background job pipeline with progress",
-      "Partial regeneration of content",
-      "Provider-agnostic generation interface",
-    ],
-    decisions: [
-      {
-        title: "Structured output",
-        body: "Keeping generated content as structured pieces makes targeted edits and partial regeneration possible.",
+        title: "Webhooks for freshness",
+        body: "Real-time webhooks alongside the Admin API keep the dashboard current without constant polling.",
       },
     ],
     results: [],

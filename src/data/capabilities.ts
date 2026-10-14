@@ -1,8 +1,6 @@
 /**
  * Capability clusters and how they connect in a production system.
- * Skills listed are limited to those confirmed by the design reference and
- * project stacks. EDIT: add tools you use in production (e.g. PostgreSQL,
- * Redis, Django, NestJS, Azure) once confirmed.
+ * Skills are taken from the CV (Mubashar_Ali_Senior_Full_Stack_AI_Engineer_CV.pdf).
  */
 
 export type CapabilityId = "ai" | "backend" | "frontend" | "cloud" | "data";
@@ -22,16 +20,18 @@ export const capabilities: Capability[] = [
   {
     id: "ai",
     index: "01",
-    title: "AI & Intelligent Systems",
+    title: "AI & LLM Engineering",
     short: "Intelligence",
     summary:
-      "Treating the model as one component of a larger system: deciding what context it sees, which tools it may call, and how its output is checked before anyone relies on it.",
+      "Treating the model as one component of a larger system: deciding what context it sees, which tools it may call, which model handles which task, and how its output is checked before anyone relies on it.",
     skills: [
-      "LLM integration — OpenAI, Claude",
-      "RAG & GraphRAG pipelines",
-      "Agentic workflows (LangGraph)",
-      "Multi-agent orchestration",
-      "Fine-tuning & evaluation",
+      "LLMs · RAG · Agentic AI",
+      "LangChain · LangGraph · CrewAI",
+      "OpenAI GPT-4o · Claude 3.5 Sonnet",
+      "AWS Bedrock · Hugging Face",
+      "Multi-agent systems",
+      "Function calling & model routing",
+      "Embeddings & semantic search",
     ],
     pos: { x: 78, y: 30 },
   },
@@ -41,8 +41,16 @@ export const capabilities: Capability[] = [
     title: "Backend Engineering",
     short: "Services",
     summary:
-      "Typed, observable services that hold everything together — model calls behind stable APIs, with the timeouts, retries and streaming that AI workloads demand.",
-    skills: ["Python · FastAPI", "Node.js", "Scalable REST APIs", "Microservices", "Data pipelines"],
+      "Typed, secure services that hold everything together — microservices and event-driven systems with model calls behind stable APIs, built for high throughput and low latency.",
+    skills: [
+      "Python · FastAPI · Django · Flask",
+      "Node.js · Express · NestJS",
+      "Golang",
+      "REST · GraphQL · WebSockets",
+      "Celery · AsyncIO",
+      "JWT · OAuth2 · RBAC",
+      "Microservices & event-driven",
+    ],
     pos: { x: 50, y: 50 },
   },
   {
@@ -51,28 +59,50 @@ export const capabilities: Capability[] = [
     title: "Frontend Engineering",
     short: "Interface",
     summary:
-      "Interfaces that make complex systems feel simple: streaming responses, real-time state and design systems that stay consistent as products grow.",
-    skills: ["React · Next.js", "TypeScript", "Modern UI/UX", "Real-time applications", "Design systems"],
+      "Interfaces that make complex systems feel simple: streaming responses, real-time state and component libraries that stay consistent across product squads.",
+    skills: [
+      "React.js · Next.js",
+      "TypeScript · JavaScript (ES6+)",
+      "Redux · React Query",
+      "Tailwind CSS",
+      "Component libraries",
+      "Responsive design",
+    ],
     pos: { x: 22, y: 30 },
   },
   {
     id: "data",
     index: "04",
-    title: "Data & AI Engineering",
+    title: "Data & Knowledge Systems",
     short: "Knowledge",
     summary:
-      "The knowledge layer AI depends on: ingestion, chunking and embeddings, vector search, and the pipelines that keep it all fresh.",
-    skills: ["Data processing", "Vector databases", "ETL & analytics", "Model deployment"],
+      "The data layer everything depends on: relational stores scaled to tens of millions of rows, vector search for retrieval, and streaming and batch pipelines that keep it fresh.",
+    skills: [
+      "PostgreSQL · MySQL · MongoDB",
+      "Redis",
+      "Pinecone · ChromaDB",
+      "Databricks · Spark SQL",
+      "Apache Kafka",
+      "Partitioning & query optimisation",
+      "Multi-tenant data architecture",
+    ],
     pos: { x: 72, y: 78 },
   },
   {
     id: "cloud",
     index: "05",
-    title: "Cloud & Infrastructure",
+    title: "Cloud & DevOps",
     short: "Platform",
     summary:
-      "Reproducible infrastructure underneath it all — containerised services, automated delivery and architecture that scales without surprises.",
-    skills: ["AWS · GCP", "Docker", "Kubernetes", "CI/CD pipelines", "Scalable architecture"],
+      "Cloud-native infrastructure underneath it all — containerised services on Kubernetes, infrastructure as code and GitOps delivery, observed and kept up.",
+    skills: [
+      "AWS — EC2, S3, Lambda, RDS, ECS, EKS",
+      "Azure · GCP",
+      "Docker · Kubernetes",
+      "Terraform · ArgoCD (GitOps)",
+      "CI/CD · GitHub Actions",
+      "Nginx · Linux · Datadog",
+    ],
     pos: { x: 28, y: 78 },
   },
 ];
@@ -82,8 +112,8 @@ export const capabilityLinks: { a: CapabilityId; b: CapabilityId; note: string }
   { a: "frontend", b: "backend", note: "Typed contracts and streamed responses to the UI" },
   { a: "backend", b: "ai", note: "Model calls behind APIs with retries, timeouts and guardrails" },
   { a: "ai", b: "data", note: "Retrieval grounds generation in your own knowledge" },
-  { a: "backend", b: "data", note: "Ingestion, ETL and storage pipelines" },
+  { a: "backend", b: "data", note: "Schemas, partitioning and event pipelines" },
   { a: "cloud", b: "backend", note: "Containerised services, scaled and observed" },
-  { a: "cloud", b: "data", note: "Managed stores and model deployment" },
+  { a: "cloud", b: "data", note: "Managed stores, replicas and data platforms" },
   { a: "frontend", b: "ai", note: "UX patterns for non-deterministic output" },
 ];

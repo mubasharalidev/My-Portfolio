@@ -1,9 +1,8 @@
-/** Monogram: M and N drawn as one continuous signal path, nodes at each vertex. */
+/** Monogram: M and A drawn as one continuous signal path, nodes at each vertex. */
 export function LogoMark({ className }: { className?: string }) {
   const pts: [number, number][] = [
-    [3, 23], [3, 7], [11, 16], [19, 7], [19, 23], [19, 7], [31, 23], [31, 7],
+    [3, 23], [3, 7], [11, 16], [19, 7], [19, 23], [25, 7], [31, 23],
   ];
-  const unique = pts.filter((p, i) => pts.findIndex((q) => q[0] === p[0] && q[1] === p[1]) === i);
   return (
     <svg viewBox="0 0 34 30" fill="none" className={className} aria-hidden>
       <polyline
@@ -13,7 +12,8 @@ export function LogoMark({ className }: { className?: string }) {
         strokeLinejoin="round"
         strokeLinecap="round"
       />
-      {unique.map(([x, y]) => (
+      <line x1="22" y1="17" x2="28" y2="17" stroke="url(#logo-g)" strokeWidth="2" strokeLinecap="round" />
+      {pts.map(([x, y]) => (
         <circle key={`${x}-${y}`} cx={x} cy={y} r="1.9" fill="#080B12" stroke="#59E5E8" strokeWidth="1.2" />
       ))}
       <defs>

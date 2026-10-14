@@ -60,6 +60,7 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
               <span className="label text-ink">Case study {project.index}</span>
               <span className="h-px w-8 bg-line-strong" />
               <span className="label">{project.category}</span>
+              {project.context && <span className="label hidden text-cyan sm:inline">· {project.context}</span>}
             </Reveal>
             <MaskLines as="h1" immediate delay={0.1} lines={[project.title]} className="display mt-6 text-[clamp(2.8rem,8vw,7.5rem)]" />
             <Reveal delay={0.25}>

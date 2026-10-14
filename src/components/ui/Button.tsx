@@ -23,7 +23,9 @@ const variants = {
 
 /** Pill CTA with a sliding arrow glyph. Renders Link, or <a> for external targets. */
 export function Button({ href, children, variant = "primary", icon, className, external }: ButtonProps) {
-  const isExternal = external ?? /^(https?:|mailto:)/.test(href);
+  // Files (e.g. the CV PDF) and external URLs bypass client-side routing.
+  const isFile = /\.pdf$/i.test(href);
+  const isExternal = external ?? (isFile || /^(https?:|mailto:|tel:)/.test(href));
   const content = (
     <>
       <span className="relative">{children}</span>
@@ -47,7 +49,7 @@ export function Button({ href, children, variant = "primary", icon, className, e
   const classes = cn(base, variants[variant], className);
 
   if (isExternal) {
-    const newTab = href.startsWith("http");
+    const newTab = isFile || href.startsWith("http");
     return (
       <a href={href} className={classes} {...(newTab ? { target: "_blank", rel: "noreferrer" } : {})}>
         {content}

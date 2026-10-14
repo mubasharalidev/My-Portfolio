@@ -1,4 +1,4 @@
-import { FileText, Mail } from "lucide-react";
+import { Download, FileText, Mail } from "lucide-react";
 import { profile } from "@/data/profile";
 import { MaskLines, Reveal } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
@@ -20,10 +20,10 @@ const principles = [
 
 export function About() {
   const facts = [
-    { k: "Currently building", v: profile.currentlyBuilding },
-    { k: "Availability", v: profile.availability.detail },
-    { k: "Focus", v: profile.focus.slice(0, 3).join(" · ") },
-    ...(profile.location ? [{ k: "Based in", v: profile.location }] : []),
+    { k: "Currently", v: "Senior Full Stack & AI Engineer at 10Pearls" },
+    { k: "Based in", v: `${profile.location} · open to remote` },
+    { k: "Leadership", v: "Led engineering teams of up to 6" },
+    { k: "Education", v: "BS Computer Science, UMT Lahore" },
   ];
 
   return (
@@ -63,9 +63,10 @@ export function About() {
                 between retrieval, orchestration, infrastructure and interface.
               </p>
               <p className="mt-6 leading-relaxed text-mist">
-                My path ran from computer science fundamentals through full-stack product work and scalable cloud systems
-                into AI engineering. That range is the point: I can take an idea from architecture diagram to deployed,
-                observable product, and make the decisions in between with the whole system in view.
+                Over 5+ years I’ve shipped AI products and scalable SaaS and fintech platforms for clients in the UK, the
+                Netherlands and Pakistan — as the sole backend engineer for a Dutch product company, as a team lead for UK
+                multi-tenant SaaS serving 50,000+ users, and now architecting enterprise fintech backends. That range is the
+                point: I can take an idea from architecture diagram to deployed, observable product.
               </p>
             </Reveal>
 
@@ -96,6 +97,9 @@ export function About() {
               <div className="mt-12 flex flex-wrap gap-3">
                 <Button href={profile.resumeUrl} icon={<FileText className="size-4" />}>
                   View resume
+                </Button>
+                <Button href={profile.resumePdf} variant="ghost" icon={<Download className="size-4" />}>
+                  Download CV
                 </Button>
                 <Button href={`mailto:${profile.email}`} variant="ghost" icon={<Mail className="size-4" />}>
                   Email me

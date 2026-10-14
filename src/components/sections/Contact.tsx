@@ -31,7 +31,7 @@ export function Contact() {
 
   const links = [
     ...profile.socials.map((s) => ({ label: s.label, detail: s.handle, href: s.href })),
-    { label: "Resume", detail: "View & download", href: profile.resumeUrl },
+    { label: "Download CV", detail: "PDF · 2 pages", href: profile.resumePdf },
   ];
 
   return (
@@ -120,7 +120,7 @@ export function Contact() {
 
           <ul className="border-t border-line lg:col-span-5 lg:col-start-8">
             {links.map((l, i) => {
-              const external = l.href.startsWith("http");
+              const external = l.href.startsWith("http") || l.href.endsWith(".pdf");
               return (
                 <li key={l.label}>
                   <Reveal delay={i * 0.06}>

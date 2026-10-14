@@ -21,7 +21,7 @@ export function Work() {
           index="03"
           label="Selected work"
           lines={["Real projects.", <span key="b" className="text-signal">Real systems.</span>]}
-          intro="A selection of AI-powered products, platforms and systems I’ve built — each one a different layer of the same craft."
+          intro="Production AI and platform work for clients in the UK, the Netherlands and Pakistan — every outcome below is measured, not estimated."
         />
 
         <div className="mt-16 lg:mt-24 lg:grid lg:grid-cols-12 lg:gap-14">
@@ -146,11 +146,12 @@ function ProjectEntry({ project: p, index, onActive }: { project: Project; index
           >
             {p.category}
           </span>
+          {p.context && <span className="label !text-[0.625rem]">{p.context}</span>}
         </div>
 
         <h3 id={`proj-${p.slug}`} className="mt-6">
           <Link href={`/work/${p.slug}`} className="group inline-flex items-start gap-3">
-            <span className="display text-[clamp(2.3rem,4.6vw,4.4rem)] transition-colors duration-500 group-hover:text-cyan">
+            <span className="display text-[clamp(2.1rem,3.9vw,3.9rem)] transition-colors duration-500 group-hover:text-cyan">
               {p.title}
             </span>
             <ArrowUpRight
@@ -168,15 +169,33 @@ function ProjectEntry({ project: p, index, onActive }: { project: Project; index
               <dd className="text-[0.9375rem] leading-relaxed text-mist">{r.v}</dd>
             </div>
           ))}
+          {p.results.length > 0 && (
+            <div className="grid gap-2 py-5 sm:grid-cols-[7rem_1fr] sm:gap-6">
+              <dt className="label pt-0.5 !text-lime">Impact</dt>
+              <dd>
+                <ul className="space-y-1.5">
+                  {p.results.map((r) => (
+                    <li key={r} className="flex gap-3 text-[0.9375rem] font-medium leading-relaxed text-ink">
+                      <span className="mt-[0.7em] h-px w-3 shrink-0 bg-lime" aria-hidden />
+                      {r}
+                    </li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          )}
         </dl>
 
         <div className="mt-8 flex flex-wrap items-center justify-between gap-6">
           <ul className="flex flex-wrap gap-2" aria-label="Technology stack">
-            {p.stack.map((s) => (
+            {p.stack.slice(0, 6).map((s) => (
               <li key={s} className="rounded-full border border-line bg-white/[0.03] px-3 py-1.5 font-mono text-[0.6875rem] tracking-wide text-ink">
                 {s}
               </li>
             ))}
+            {p.stack.length > 6 && (
+              <li className="rounded-full px-2 py-1.5 font-mono text-[0.6875rem] tracking-wide text-dim">+{p.stack.length - 6} more</li>
+            )}
           </ul>
           <Link
             href={`/work/${p.slug}`}

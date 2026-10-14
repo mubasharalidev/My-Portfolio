@@ -3,8 +3,8 @@
 import dynamic from "next/dynamic";
 import { useState, type KeyboardEvent } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Boxes, Network, Waypoints } from "lucide-react";
-import { notebook } from "@/data/profile";
+import { ArrowUpRight, Boxes, Network, Waypoints } from "lucide-react";
+import { profile } from "@/data/profile";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { cn, duration, ease } from "@/lib/motion";
@@ -38,6 +38,7 @@ const demos = [
 ];
 
 export function Lab() {
+  const github = profile.socials.find((s) => s.label === "GitHub")!;
   const [active, setActive] = useState(0);
   const Demo = demos[active].Component;
 
@@ -109,36 +110,24 @@ export function Lab() {
           </div>
         </div>
 
-        <div className="mt-20 grid gap-10 lg:grid-cols-12">
-          <Reveal className="lg:col-span-4">
-            <p className="label">From the notebook</p>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-mist">Further explorations across models, modalities and agent design.</p>
-          </Reveal>
-          <ul className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:col-span-8">
-            {notebook.map((n, i) => {
-              const inner = (
-                <>
-                  <span className="label !text-[0.625rem] text-dim">{String(i + 1).padStart(2, "0")}</span>
-                  <span>
-                    <span className="block font-display text-lg font-medium tracking-tight">{n.title}</span>
-                    <span className="block text-sm text-mist">{n.note}</span>
-                  </span>
-                </>
-              );
-              return (
-                <li key={n.title} className="bg-void">
-                  {n.href ? (
-                    <a href={n.href} target="_blank" rel="noreferrer" className="flex h-full gap-5 p-6 transition-colors hover:bg-deep">
-                      {inner}
-                    </a>
-                  ) : (
-                    <div className="flex h-full gap-5 p-6">{inner}</div>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+        <Reveal className="mt-14">
+          <a
+            href={github.href}
+            target="_blank"
+            rel="noreferrer"
+            className="group flex flex-col gap-4 rounded-2xl border border-line p-6 transition-colors duration-500 hover:border-cyan/40 hover:bg-deep sm:flex-row sm:items-center sm:justify-between sm:p-8"
+          >
+            <span className="min-w-0">
+              <span className="label block">More on GitHub</span>
+              <span className="mt-2 block font-display text-xl font-medium tracking-tight transition-colors [overflow-wrap:anywhere] group-hover:text-cyan sm:text-2xl">
+                github.com/{github.handle}
+              </span>
+            </span>
+            <span className="grid size-12 shrink-0 place-items-center rounded-full border border-line transition-all duration-500 ease-[var(--ease-expo)] group-hover:rotate-45 group-hover:border-cyan group-hover:text-cyan">
+              <ArrowUpRight className="size-5" aria-hidden />
+            </span>
+          </a>
+        </Reveal>
       </div>
     </section>
   );
